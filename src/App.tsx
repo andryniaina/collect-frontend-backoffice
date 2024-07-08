@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import "./App.css";
+import FormBuilderPage from "./pages/FormBuilder";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 768);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsOpen(true);
+      } else {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app-container">
+      <Navbar toggleSidebar={toggleSidebar} />
+      <div className="app-content">
+        <Sidebar isOpen={isOpen} />
+        <div className={`content ${isOpen ? "sidebar-open" : ""}`}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <div className="content">
+                  <FormBuilderPage />
+                </div>
+              }
+            />
+          </Routes>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
