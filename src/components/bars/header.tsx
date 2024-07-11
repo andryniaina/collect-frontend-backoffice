@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
 import { Link } from 'react-router-dom';
-import { ModeToggle } from './mode-toggle';
+import { ModeToggle } from '../mode-toggle';
 
 export default function Header() {
   return (

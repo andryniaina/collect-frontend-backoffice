@@ -1,5 +1,5 @@
-import Header from "@/components/header";
-import Sidebar from "@/components/SideBar";
+import Header from "@/components/bars/header";
+import Sidebar from "@/components/bars/SideBar";
 import { Outlet } from "react-router-dom";
 
 const AuthenticatedLayout = () => {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DashboardNav } from '@/components/dashboard-nav';
+import { DashboardNav } from '@/components/bars/dashboard-nav';
 import { navItems } from '@/data/const/data';
 import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';
