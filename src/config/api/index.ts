@@ -1,1 +1,0 @@
-export const API_URL = "http://51.77.159.227:5024"
