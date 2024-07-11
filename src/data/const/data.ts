@@ -1,4 +1,4 @@
-import { NavItem } from '@/types';
+import { NavItem } from '@/data/types';
 
 export type User = {
   id: number;

@@ -5,9 +5,9 @@ import { useLocation } from "react-router-dom";
 
 import { Icons } from "@/components/default-icons";
 import { cn } from "@/lib/utils";
-import { NavItem } from "@/types";
+import { NavItem } from "@/data/types";
 import { Dispatch, SetStateAction } from "react";
-import { useSidebar } from "@/hooks/useSidebar";
+import { useSidebar } from "@/lib/hooks/useSidebar";
 import {
   Tooltip,
   TooltipContent,
