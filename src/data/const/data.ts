@@ -1,6 +1,6 @@
 import { NavItem } from '@/data/types';
 
-export type User = {
+export type Project = {
   id: number;
   name: string;
   company: string;
@@ -8,7 +8,7 @@ export type User = {
   verified: boolean;
   status: string;
 };
-export const users: User[] = [
+export const projects: Project[] = [
   {
     id: 1,
     name: 'Candice Schiner',
@@ -118,28 +118,16 @@ export const navItems: NavItem[] = [
     label: 'Dashboard'
   },
   {
-    title: 'User',
-    href: '/dashboard/user',
-    icon: 'user',
-    label: 'user'
-  },
-  {
-    title: 'Employee',
-    href: '/dashboard/employee',
-    icon: 'employee',
-    label: 'employee'
+    title: 'Projects',
+    href: '/dashboard/project',
+    icon: 'project',
+    label: 'project'
   },
   {
     title: 'Profile',
     href: '/dashboard/profile',
     icon: 'profile',
     label: 'profile'
-  },
-  {
-    title: 'Kanban',
-    href: '/dashboard/kanban',
-    icon: 'kanban',
-    label: 'kanban'
   },
   {
     title: 'Login',

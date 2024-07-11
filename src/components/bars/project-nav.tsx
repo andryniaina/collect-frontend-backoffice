@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-export function UserNav() {
+export function ProjectNav() {
   const session = {user: {
     name: "Andry",
     email: "andrykeeper@gmail.com",
