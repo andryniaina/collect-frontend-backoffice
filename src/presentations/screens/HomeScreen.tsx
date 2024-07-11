@@ -1,6 +1,8 @@
 const HomeScreen = () => {
     return (
+        <>
         <div>Collect</div>
+        </>
     )
 }
 
