@@ -1,27 +1,18 @@
-<<<<<<< HEAD
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import HomeScreen from "../presentations/screens/HomeScreen";
-=======
-import { Routes, Route,useLocation,Navigate } from "react-router-dom";
->>>>>>> 7a7efcc2d1389d50af9365e8aa90d95413e30665
 import AuthenticatedLayout from "@/presentations/layouts/AuthenticatedLayout";
 import DashBoard from "@/presentations/screens/DashBoard";
 import Project from "@/presentations/screens/DashBoard/Project";
 import Login from "@/presentations/screens/Login";
 import { AuthContext, AuthProvider } from "../services/AuthContext";
 import { useContext } from "react";
-<<<<<<< HEAD
-import { AddUser } from "@/presentations/screens/Users";
-import CreateProject from "@/presentations/screens/DashBoard/Project/Create";
-=======
+import {ListUser } from "@/presentations/screens/Users";
 import { AddUser } from "@/presentations/screens/Users/addUser";
-import { ListUser } from "@/presentations/screens/Users";
->>>>>>> 7a7efcc2d1389d50af9365e8aa90d95413e30665
+import CreateProject from "@/presentations/screens/DashBoard/Project/Create";
 
 const MainRoutes = () => {
   return (
     <AuthProvider>
-<<<<<<< HEAD
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<HomeScreen />} />
@@ -39,7 +30,6 @@ const MainRoutes = () => {
           />
         </Route>
       </Routes>
-=======
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path = "/dashboard" element={<AuthenticatedLayout />}>
@@ -49,7 +39,6 @@ const MainRoutes = () => {
         <Route path="adduser" element={<RequireAuth><AddUser/></RequireAuth>}/>
       </Route>
     </Routes>
->>>>>>> 7a7efcc2d1389d50af9365e8aa90d95413e30665
     </AuthProvider>
   );
 };
