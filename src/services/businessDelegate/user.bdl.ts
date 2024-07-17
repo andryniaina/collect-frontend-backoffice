@@ -32,7 +32,7 @@ export const getUsers = async () => {
 export const addUser = async (payload: any) => {
     let data = JSON.stringify(payload);
     try {
-        return await axiosInstance.post('/user', data)
+        return await axiosInstance.post('/auth/register', data)
     } catch (error) {
         throw error;
     }

@@ -1,49 +1,34 @@
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { UsersTable } from '@/components/tables/user-tables/user';
+import { projects } from '@/data/const/data';
+import { useEffect, useState } from 'react';
+import { getUsersSA } from '@/services/application/user.sa';
 
-export function AddUser() {
+const breadcrumbItems = [
+  { title: 'Dashboard', link: '/dashboard' },
+  { title: 'User', link: '/dashboard/users' }
+];
+export  function ListUser() {
+  const [users, setUsers] = useState([]);
+
+  const getListUsers = () => {
+    getUsersSA().then(resp => {
+      if (resp?.status == 200) {
+        setUsers(resp.data);
+      }
+    });
+  }
+
+  useEffect(() => {
+    getListUsers();
+  }, [])
+
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-xl">Création d'utilisateur</CardTitle>
-        <CardDescription>
-          Entrez vos données pour créer votre compte
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="first-name">Name</Label>
-              <Input id="first-name" placeholder="Name" required />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="last-name">Role</Label>
-              <Input id="role" placeholder="Role" required />
-            </div>
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="mail@jakaranda.com"
-              required
-            />
-          </div>
-          <Button type="submit" className="w-full">
-            Valider
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  )
+    <>
+      <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
+        <Breadcrumbs items={breadcrumbItems} />
+        <UsersTable data={users} />
+      </div>
+    </>
+  );
 }
