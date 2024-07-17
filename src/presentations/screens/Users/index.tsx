@@ -1,6 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { UsersTable } from '@/components/tables/user-tables/user';
-import { projects } from '@/data/const/data';
 import { useEffect, useState } from 'react';
 import { getUsersSA } from '@/services/application/user.sa';
 

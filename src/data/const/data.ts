@@ -1,7 +1,8 @@
 import { NavItem } from '@/data/types';
 
 export type Project = {
-  _id: number;
+  id?: number ;
+  _id?: number;
   name: string;
   version: string;
   createdAt: string;
