@@ -29,16 +29,16 @@ export const columns: ColumnDef<Project>[] = [
     header: 'NAME'
   },
   {
-    accessorKey: 'company',
-    header: 'COMPANY'
+    accessorKey: 'version',
+    header: 'VERSION'
   },
   {
-    accessorKey: 'role',
-    header: 'ROLE'
+    accessorKey: 'createdAt',
+    header: 'CREATED AT'
   },
   {
-    accessorKey: 'status',
-    header: 'STATUS'
+    accessorKey: 'updatedAt',
+    header: 'UPDATED AT'
   },
   {
     id: 'actions',

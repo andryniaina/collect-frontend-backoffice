@@ -8,3 +8,12 @@ export const postForm = async (formData: any) => {
     console.error(error);
   }
 };
+
+export const getForms = async() => {
+  try {
+    const forms = await bdl.getForms() ;
+    return forms ;
+  } catch(error) {
+    return [] ;
+  }
+}
