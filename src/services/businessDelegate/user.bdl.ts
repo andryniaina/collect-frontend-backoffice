@@ -8,12 +8,12 @@ type ApiResponse = any | ErrorResponse;
 
 export const login = async (username: string, password: string): Promise<ApiResponse> => {
     let data = JSON.stringify({
-        "email": username,
+        "username": username,
         "password": password
     });
 
     try {
-        const response = await axiosInstance.post('/login', data)
+        const response = await axiosInstance.post('/auth/login', data)
         if (response?.data?.access_token) return response as any
         else return { isError: true, response }
     } catch (error) {
