@@ -130,7 +130,7 @@ export const navItems: NavItem[] = [
     label: 'profile'
   },
   {
-    title: 'Login',
+    title: 'Logout',
     href: '/',
     icon: 'login',
     label: 'login'

@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import logo from "@/assets/collect.png";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/services/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 function ImageLogin() {
   return (
@@ -22,18 +22,24 @@ export default function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext);
+  const { login,logout,isAuthenticated } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     try {
       console.log("REQ===>",username,password);
       const resp = await login(username, password);
 
-      if (resp) navigate("/");
+      if (resp) navigate("/dashboard");
     } catch (error) {
       alert('Login failed');
     }
   };
+
+  useEffect(() => {
+    if(isAuthenticated){
+      logout();
+    }
+  }, []);
 
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
