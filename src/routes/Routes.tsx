@@ -6,7 +6,7 @@ import Project from "@/presentations/screens/DashBoard/Project";
 import Login from "@/presentations/screens/Login";
 import { AuthContext, AuthProvider } from "../services/AuthContext";
 import { useContext } from "react";
-import {ListUser } from "@/presentations/screens/Users";
+import { ListUser } from "@/presentations/screens/Users";
 import { AddUser } from "@/presentations/screens/Users/addUser";
 import CreateProject from "@/presentations/screens/DashBoard/Project/Create";
 
@@ -14,8 +14,7 @@ const MainRoutes = () => {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<HomeScreen />} />
+        <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<AuthenticatedLayout />}>
           <Route path="" element={<DashBoard />} />
           <Route path="project" element={<Project />} />
@@ -24,21 +23,20 @@ const MainRoutes = () => {
             path="users"
             element={
               <RequireAuth>
+                <ListUser />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="adduser"
+            element={
+              <RequireAuth>
                 <AddUser />
               </RequireAuth>
             }
           />
         </Route>
       </Routes>
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path = "/dashboard" element={<AuthenticatedLayout />}>
-        <Route path="" element={<DashBoard />} />
-        <Route path="project" element={<Project/>}/>
-        <Route path="users" element={<RequireAuth><ListUser/></RequireAuth>}/>
-        <Route path="adduser" element={<RequireAuth><AddUser/></RequireAuth>}/>
-      </Route>
-    </Routes>
     </AuthProvider>
   );
 };
