@@ -41,13 +41,13 @@ export const navItems: NavItem[] = [
     label: 'project'
   },
   {
-    title: 'Profile',
-    href: '/dashboard/profile',
+    title: 'User',
+    href: '/dashboard/users',
     icon: 'profile',
     label: 'profile'
   },
   {
-    title: 'Login',
+    title: 'Logout',
     href: '/',
     icon: 'login',
     label: 'login'
