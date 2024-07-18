@@ -10,7 +10,7 @@ export default function Header() {
       <nav className="flex h-14 items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link
-            to={'https://github.com/Kiranism/next-shadcn-dashboard-starter'}
+            to={'http://51.77.159.227:5555/dashboard'}
             target="_blank"
           >
             <svg
