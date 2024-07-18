@@ -5,8 +5,8 @@ import React from 'react';
 
 const breadcrumbItems = [
   { title: 'Dashboard', link: '/dashboard' },
-  { title: 'User', link: '/dashboard/user' },
-  { title: 'Create', link: '/dashboard/user/create' }
+  { title: 'Project', link: '/dashboard/project' },
+  { title: 'Create', link: '/dashboard/project/new' }
 ];
 export default function CreateProject() {
   return (
@@ -15,8 +15,8 @@ export default function CreateProject() {
         <Breadcrumbs items={breadcrumbItems} />
         <ProductForm
           categories={[
-            { _id: 'shirts', name: 'shirts' },
-            { _id: 'pants', name: 'pants' }
+            { _id: 'Public', name: 'Public' },
+            { _id: 'Public', name: 'Private' }
           ]}
           initialData={null}
           key={null}
