@@ -133,8 +133,8 @@ export function BarGraph() {
 
   const total = React.useMemo(
     () => ({
-      desktop: chartData.reduce((acc, curr) => acc + curr.desktop, 0),
-      mobile: chartData.reduce((acc, curr) => acc + curr.mobile, 0)
+      desktop: 0,
+      mobile: 0
     }),
     []
   );
@@ -145,7 +145,7 @@ export function BarGraph() {
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
           <CardTitle>Bar Chart - Interactive</CardTitle>
           <CardDescription>
-            Showing total visitors for the last 3 months
+            Showing total submissions for the last 3 months
           </CardDescription>
         </div>
         <div className="flex">

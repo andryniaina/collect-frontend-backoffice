@@ -43,7 +43,7 @@ export function AreaGraph() {
       <CardHeader>
         <CardTitle>Area Chart - Stacked</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Showing total submissions for the last 6 months
         </CardDescription>
       </CardHeader>
       <CardContent>
