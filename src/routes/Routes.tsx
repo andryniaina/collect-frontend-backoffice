@@ -9,6 +9,8 @@ import { useContext } from "react";
 import { ListUser } from "@/presentations/screens/Users";
 import { AddUser } from "@/presentations/screens/Users/addUser";
 import CreateProject from "@/presentations/screens/DashBoard/Project/Create";
+import FormBuilder from "@/components/FormItem";
+import FormBuilderPage from "@/presentations/screens/DashBoard/Project/FormBuilder";
 
 const MainRoutes = () => {
   return (
@@ -18,6 +20,7 @@ const MainRoutes = () => {
         <Route path="/dashboard" element={<AuthenticatedLayout />}>
           <Route path="" element={<DashBoard />} />
           <Route path="project" element={<Project />} />
+          <Route path="project/builder" element={<FormBuilderPage/>} />
           <Route path="project/:id" element={<CreateProject />} />
           <Route
             path="users"

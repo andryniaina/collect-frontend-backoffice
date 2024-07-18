@@ -42,14 +42,10 @@ export const IMG_MAX_LIMIT = 3;
 const formSchema = z.object({
   name: z
     .string()
-    .min(3, { message: 'Product Name must be at least 3 characters' }),
-  imgUrl: z
-    .array(ImgSchema)
-    .max(IMG_MAX_LIMIT, { message: 'You can only add up to 3 images' })
-    .min(1, { message: 'At least one image must be added.' }),
+    .min(3, { message: 'Project Name must be at least 3 characters' }),
   description: z
     .string()
-    .min(3, { message: 'Product description must be at least 3 characters' }),
+    .min(3, { message: 'Project description must be at least 3 characters' }),
   price: z.coerce.number(),
   category: z.string().min(1, { message: 'Please select a category' })
 });
@@ -91,29 +87,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   });
 
   const onSubmit = async (data: ProductFormValues) => {
-    try {
-      setLoading(true);
-      if (initialData) {
-        // await axios.post(`/api/products/edit-product/${initialData._id}`, data);
-      } else {
-        // const res = await axios.post(`/api/products/create-product`, data);
-        // console.log("product", res);
-      }
-      router(`/dashboard/products`);
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your request.'
-      });
-    } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your request.'
-      });
-    } finally {
-      setLoading(false);
-    }
+    console.log("ato")
+    router("/dashboard/project/builder")
   };
 
   const onDelete = async () => {
@@ -125,8 +100,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       setOpen(false);
     }
   };
-
-  const triggerImgUrlValidation = () => form.trigger('imgUrl');
 
   return (
     <>
@@ -237,7 +210,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               )}
             />
           </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
+          <Button className="ml-auto" type="submit">
             {action}
           </Button>
         </form>

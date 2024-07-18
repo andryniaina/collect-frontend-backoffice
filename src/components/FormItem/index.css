@@ -1,0 +1,70 @@
+.form-builder-container {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    min-height: 100px; /* Make the box shorter */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .empty-form-message {
+    font-size: 16px;
+    color: #777;
+  }
+  
+  .add-question-button, .edit-question-button {
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .question-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .question-input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .add-question-submit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .question-text {
+    font-size: 16px;
+    color: #333;
+  }
+  

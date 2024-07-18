@@ -119,11 +119,11 @@ export default function page() {
               <div className="col-span-4">
                 <BarGraph />
               </div>
-              <div className="col-span-4">
-                <AreaGraph />
-              </div>
               <div className="col-span-4 md:col-span-3">
                 <PieGraph />
+              </div>
+              <div className="col-span-4">
+                <AreaGraph />
               </div>
             </div>
           </TabsContent>

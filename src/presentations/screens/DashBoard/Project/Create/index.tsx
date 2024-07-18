@@ -16,7 +16,7 @@ export default function CreateProject() {
         <ProductForm
           categories={[
             { _id: 'Public', name: 'Public' },
-            { _id: 'Public', name: 'Private' }
+            { _id: 'Private', name: 'Private' }
           ]}
           initialData={null}
           key={null}
