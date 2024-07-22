@@ -20,7 +20,7 @@ const MainRoutes = () => {
         <Route path="/dashboard" element={<AuthenticatedLayout />}>
           <Route path="" element={<DashBoard />} />
           <Route path="project" element={<Project />} />
-          <Route path="project/builder" element={<FormBuilderPage/>} />
+          <Route path="project/builder/:id" element={<FormBuilderPage/>} />
           <Route path="project/:id" element={<CreateProject />} />
           <Route
             path="users"

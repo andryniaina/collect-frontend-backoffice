@@ -12,6 +12,7 @@ import { Project } from '@/data/const/data';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { deleteForm } from '@/services/application/form.sa';
 
 interface CellActionProps {
   data: Project;
@@ -22,7 +23,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useNavigate();
 
-  const onConfirm = async () => {};
+  const onConfirm = async () => {
+    console.log("Deleting form "+ data._id) ;
+    const formId: string = data._id?.toString() ?? "" ;
+    await deleteForm(formId) ;
+    setOpen(false) ;
+  };
 
   return (
     <>
@@ -43,7 +49,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router(`/dashboard/project/${data._id}`)}
+            onClick={() => router(`/dashboard/project/builder/${data._id}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

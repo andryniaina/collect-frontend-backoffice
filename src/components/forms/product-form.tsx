@@ -28,16 +28,8 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 // import FileUpload from "@/components/FileUpload";
 import { useToast } from '../ui/use-toast';
-const ImgSchema = z.object({
-  fileName: z.string(),
-  name: z.string(),
-  fileSize: z.number(),
-  size: z.number(),
-  fileKey: z.string(),
-  key: z.string(),
-  fileUrl: z.string(),
-  url: z.string()
-});
+import { version } from 'os';
+import { postForm } from '@/services/application/form.sa';
 export const IMG_MAX_LIMIT = 3;
 const formSchema = z.object({
   name: z
@@ -46,7 +38,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(3, { message: 'Project description must be at least 3 characters' }),
-  price: z.coerce.number(),
+  version: z.coerce.number(),
   category: z.string().min(1, { message: 'Please select a category' })
 });
 
@@ -76,8 +68,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     : {
         name: '',
         description: '',
-        price: 0,
-        imgUrl: [],
+        version: 0,
         category: ''
       };
 
@@ -87,8 +78,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   });
 
   const onSubmit = async (data: ProductFormValues) => {
-    console.log("ato")
-    router("/dashboard/project/builder")
+    console.log("data",data)
+    const {_id,name} : any = await postForm(data) ;
+    router("/dashboard/project/builder/"+_id) ;
   };
 
   const onDelete = async () => {
@@ -165,7 +157,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             />
             <FormField
               control={form.control}
-              name="price"
+              name="version"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Version</FormLabel>

@@ -1,10 +1,17 @@
+.container-builder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .form-builder-page {
     padding: 20px;
+    width: 60vw;
   }
   
   .add-new-form-builder-button {
     margin-top: 20px;
-    background-color: #007bff;
+    background-color: black;
     color: white;
     border: none;
     padding: 10px;
@@ -13,5 +20,6 @@
     display: block;
     width: 100%;
     text-align: center;
+    margin-bottom: 20px;
   }
   
