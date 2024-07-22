@@ -13,6 +13,7 @@ import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { deleteForm } from '@/services/application/form.sa';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface CellActionProps {
   data: Project;
@@ -22,11 +23,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useNavigate();
-
+  const queryClient = useQueryClient()
   const onConfirm = async () => {
     console.log("Deleting form "+ data._id) ;
     const formId: string = data._id?.toString() ?? "" ;
     await deleteForm(formId) ;
+    queryClient.refetchQueries({queryKey: ['forms']})
     setOpen(false) ;
   };
 
