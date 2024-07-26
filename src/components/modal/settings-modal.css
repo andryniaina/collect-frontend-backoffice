@@ -1,0 +1,23 @@
+.add-condition-button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4%;
+  cursor: pointer;
+  width: 60%;
+  font-weight: 600;
+  font-size: 14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.condition-container-with-three-select-inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}

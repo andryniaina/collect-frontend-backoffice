@@ -41,6 +41,10 @@ export const columns: ColumnDef<Project>[] = [
     header: 'UPDATED AT'
   },
   {
+    accessorKey: 'status',
+    header: 'STATUS'  
+  },
+  {
     id: 'actions',
     cell: ({ row }) => <CellAction data={row.original} />
   }

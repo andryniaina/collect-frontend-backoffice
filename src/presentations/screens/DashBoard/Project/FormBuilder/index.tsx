@@ -71,6 +71,17 @@ const FormBuilderPage: React.FC = () => {
     navigate("/dashboard/project");
   };
 
+  const saveAsDraft = async () => {
+    let payload: any = {};
+    payload["fields"] = questions.map(({ label, type }: any) => {
+      return { name: label, type };
+    });
+    payload["status"] = "Draft";
+    console.log({ payload });
+    await updateForm(params.id ?? "", payload);
+    navigate("/dashboard/project");
+  };
+
   return (
     <div className="container-builder">
       <div className="form-builder-page">
@@ -98,6 +109,9 @@ const FormBuilderPage: React.FC = () => {
             </p>
           }
         />
+        <button className="add-new-form-builder-button" onClick={saveAsDraft}>
+          Save as draft
+        </button>
         <button className="add-new-form-builder-button" onClick={deploy}>
           Deploy
         </button>

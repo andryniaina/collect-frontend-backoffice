@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './index.css';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaCog } from 'react-icons/fa';
 import TypesBox from '../TypesBox';
+import { SettingsModal } from '@/components/modal/settings-modal';
 
 interface FormBuilderProps {
   onAddQuestion: any ;
@@ -12,6 +13,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ onAddQuestion, question }) =>
   const [isEditing, setIsEditing] = useState(false);
   const [questionText, setQuestionText] = useState(question || '');
   const [isChoosingType, setIsChoosingType] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleAddQuestionClick = () => {
     setIsEditing(true);
@@ -35,14 +38,31 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ onAddQuestion, question }) =>
     setIsEditing(true);
   };
 
+  const handleSettingsClick = () => {
+    //open modal
+    setOpen(true);
+  };
+
+  const handleConfirm = () => {
+    //close modal
+    setOpen(false);
+  };
+
   return (
     <div className="form-builder-container">
+      <SettingsModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={handleConfirm}
+        loading={loading}
+      />
       {!isEditing ? (
         <>
           {question ? (
             <>
               <div className="question-text">{question}</div>
-              <button className="edit-question-button" onClick={handleEditClick}><FaEdit/></button>
+              <button className="settings-button" onClick={handleSettingsClick}><FaCog size={15}/></button>
+              <button className="edit-question-button" onClick={handleEditClick}><FaEdit size={15}/></button>
             </>
           ) : (
             <>

@@ -24,8 +24,19 @@
     border-radius: 50%;
     cursor: pointer;
     font-size: 24px;
-    width: 40px;
-    height: 40px;
+  }
+
+  .settings-button {
+    position: absolute;
+    bottom: -20px;
+    left: 70px;
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
   }
   
   .question-input-container {
