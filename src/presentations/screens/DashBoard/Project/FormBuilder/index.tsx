@@ -9,8 +9,10 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import { getUsersSA } from "@/services/application/user.sa";
+import { useQueryClient } from '@tanstack/react-query';
 
 const FormBuilderPage: React.FC = () => {
+  const queryClient = useQueryClient()
   const [options, setOptions] = useState<Option[]>([]) ;
   useEffect(()=>{
     getUsersSA().then((response)=>{
@@ -80,6 +82,7 @@ const FormBuilderPage: React.FC = () => {
     payload["status"] = "Draft";
     console.log({ payload });
     await updateForm(params.id ?? "", payload);
+    queryClient.refetchQueries({queryKey: ['forms']})
     navigate("/dashboard/project");
   };
 
