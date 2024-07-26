@@ -66,6 +66,7 @@ const FormBuilderPage: React.FC = () => {
     payload["fields"] = questions.map(({ label, type }: any) => {
       return { name: label, type };
     });
+    payload["status"] = "Deployed";
     console.log({ payload });
     await updateForm(params.id ?? "", payload);
     navigate("/dashboard/project");
