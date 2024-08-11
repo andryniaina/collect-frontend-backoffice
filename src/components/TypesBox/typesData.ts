@@ -1,13 +1,5 @@
 export const types = [
   {
-    label: "Date",
-    value: "date",
-  },
-  {
-    label: "Point",
-    value: "point",
-  },
-  {
     label: "Text",
     value: "Text",
   },
@@ -15,7 +7,7 @@ export const types = [
     label: "Number",
     value: "number",
   },
-/*   {
+  {
     label: "Decimal",
     value: "decimal",
   },
@@ -32,15 +24,35 @@ export const types = [
     value: "datetime",
   },
   {
+    label: "Calculated",
+    value: "calculated",
+  },
+  {
+    label: "Image",
+    value: "image",
+  },
+  {
     label: "Point",
     value: "point",
   },
   {
-    label: "Photo",
-    value: "Audio",
+    label: "Line",
+    value: "line",
   },
   {
-    label: "Video",
-    value: "video",
-  }, */
+    label: "Area",
+    value: "area",
+  },
+  {
+    label: "Select One",
+    value: "selectOne",
+  },
+  {
+    label: "Multi Select",
+    value: "multiSelect",
+  },
+  {
+    label: "File",
+    value: "file",
+  },
 ];

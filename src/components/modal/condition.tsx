@@ -10,40 +10,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { ICondition as Condition } from "@/data/types/settingsTypes";
 
-interface Condition {
-    field: string;
-    comparator: string;
-    value: string;
-}
-
-export const ConditionItem = ({condition, setCondition}: {condition: Condition, setCondition: any}) => {
+export const ConditionItem = ({condition, setCondition, questions}: {condition: Condition, setCondition: any, questions: any[]}) => {
     return (
         <div className="condition-container-with-three-select-inputs">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="type">Field</Label>
-            <Select onValueChange={(value) => setCondition({...condition, field: value})}>
+            <Select defaultValue={condition.field} onValueChange={(value) => setCondition({...condition, field: value})}>
               <SelectTrigger className="flex items-center space-x-2">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Field</SelectLabel>
+                  {questions.map((question, index) => (
+                    <SelectItem value={question.label} key={index}>{question.label}</SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="type">Comparator</Label>
-            <Select onValueChange={(value) => setCondition({...condition, comparator: value})}>
+            <Select defaultValue={condition.comparator ?? "="} onValueChange={(value) => setCondition({...condition, comparator: value})}>
               <SelectTrigger className="flex items-center space-x-2">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Comparator</SelectLabel>
-                  <SelectItem value="true">=</SelectItem>
-                  <SelectItem value="false">!=</SelectItem>
+                  <SelectItem value="=">=</SelectItem>
+                  <SelectItem value="!=">!=</SelectItem>
                   <SelectItem value="answered">Answered</SelectItem>
                   <SelectItem value="not-answered">Not Answered</SelectItem>
                 </SelectGroup>

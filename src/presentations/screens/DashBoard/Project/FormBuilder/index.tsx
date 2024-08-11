@@ -9,23 +9,24 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import { getUsersSA } from "@/services/application/user.sa";
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from "@tanstack/react-query";
+import { ISettings } from "@/data/types/settingsTypes";
 
 const FormBuilderPage: React.FC = () => {
-  const queryClient = useQueryClient()
-  const [options, setOptions] = useState<Option[]>([]) ;
-  useEffect(()=>{
-    getUsersSA().then((response)=>{
-      const users = response.data ;
-      const newOptions = users.map((user:any)=>{
+  const queryClient = useQueryClient();
+  const [options, setOptions] = useState<Option[]>([]);
+  useEffect(() => {
+    getUsersSA().then((response) => {
+      const users = response.data;
+      const newOptions = users.map((user: any) => {
         return {
-          label: user.email ,
-          value: user.email
-        }
-      })
-      setOptions(newOptions) ;
-    })
-  },[])
+          label: user.email,
+          value: user.email,
+        };
+      });
+      setOptions(newOptions);
+    });
+  }, []);
   const params = useParams();
   const [formName, setFormName] = useState("Form Name");
   const [questions, setQuestions] = useState<any[]>([]);
@@ -34,7 +35,8 @@ const FormBuilderPage: React.FC = () => {
   const handleAddQuestion = (index: number) => (question: any) => {
     const newQuestions = [...questions];
     newQuestions[index]["label"] = question.label;
-    newQuestions[index]["type"] = question.type;
+    if (question.type) newQuestions[index]["type"] = question.type;
+    newQuestions[index]["settingsData"] = question.settingsData;
     setQuestions(newQuestions);
   };
 
@@ -59,14 +61,22 @@ const FormBuilderPage: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    console.log({ questions });
-  }, [questions]);
-
   const deploy = async () => {
     let payload: any = {};
-    payload["fields"] = questions.map(({ label, type }: any) => {
-      return { name: label, type };
+    payload["fields"] = questions.map(({ label, type,settingsData }: {label:any,type:any,settingsData:ISettings}) => {
+      const field:any = { name: label, type} ;
+      if(settingsData){
+        field.description = settingsData.questionOptions?.guidance;
+        field.required = settingsData.questionOptions?.mandatory;
+        field.default = settingsData.questionOptions?.default;
+        field.validation = {
+          message: settingsData.validationCriteria?.errorMessage,
+          comparator: settingsData.validationCriteria?.comparator,
+          value: settingsData.validationCriteria?.value,
+        },
+        field.formula = settingsData.validationCriteria?.formula;
+      }
+      return field;
     });
     payload["status"] = "Deployed";
     console.log({ payload });
@@ -82,7 +92,7 @@ const FormBuilderPage: React.FC = () => {
     payload["status"] = "Draft";
     console.log({ payload });
     await updateForm(params.id ?? "", payload);
-    queryClient.refetchQueries({queryKey: ['forms']})
+    queryClient.refetchQueries({ queryKey: ["forms"] });
     navigate("/dashboard/project");
   };
 
@@ -93,7 +103,9 @@ const FormBuilderPage: React.FC = () => {
         {questions.map((question, index) => (
           <FormBuilder
             key={index}
+            keyValue={index}
             question={question.label}
+            questions={questions}
             onAddQuestion={handleAddQuestion(index)}
           />
         ))}
@@ -104,7 +116,7 @@ const FormBuilderPage: React.FC = () => {
           + Add New Question
         </button>
         <MultipleSelector
-        key={JSON.stringify(options)}
+          key={JSON.stringify(options)}
           defaultOptions={options}
           placeholder="Share this form with"
           emptyIndicator={

@@ -16,37 +16,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ConditionItem } from "@/components/modal/condition";
+import { ISettings } from "@/data/types/settingsTypes";
+import { ICondition as Condition } from "@/data/types/settingsTypes";
+import { set } from "date-fns";
 
 interface AlertModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   loading: boolean;
+  settingsData: ISettings;
+  setSettingsData: (settingsData: ISettings) => void;
+  questions: any[];
 }
 
 export const SettingsModal: React.FC<AlertModalProps> = ({
   isOpen,
   onClose,
+  settingsData,
+  setSettingsData,
+  questions,
 }) => {
   const handleAddConditionClick = () => {
     console.log("add condition");
-    setConditions([...conditions, { field: "", comparator: "", value: "" }]);
+    setSettingsData({
+      ...settingsData,
+      skipLogic: {
+        ...settingsData.skipLogic,
+        conditions: [
+          ...(settingsData.skipLogic?.conditions ?? []),
+          { field: "", comparator: "", value: "" },
+        ],
+      },
+    });
   };
-
-  const [questionOptions, setQuestionOptions] = useState({
-    dataColumnName: "",
-    guidance: "",
-    default: "",
-    mandatory: false,
-  });
-
-  interface Condition {
-    field: string;
-    comparator: string;
-    value: string;
-  }
-
-  const [conditions, setConditions] = useState<Condition[]>([]);
 
   return (
     <Modal
@@ -59,7 +62,8 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
         <TabsList>
           <TabsTrigger value="options">Question Options</TabsTrigger>
           <TabsTrigger value="logic">Skip Logic</TabsTrigger>
-          <TabsTrigger value="validation">Validation Criteria</TabsTrigger>
+          <TabsTrigger value="validation">Validation</TabsTrigger>
+          <TabsTrigger value="response-options">Options</TabsTrigger>
         </TabsList>
         <TabsContent value="options" className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -67,11 +71,14 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
             <Input
               id="dataColumnName"
               placeholder="Enter your data column name"
-              value={questionOptions.dataColumnName}
+              value={settingsData.questionOptions?.columnName ?? ""}
               onChange={(e) =>
-                setQuestionOptions({
-                  ...questionOptions,
-                  dataColumnName: e.target.value,
+                setSettingsData({
+                  ...settingsData,
+                  questionOptions: {
+                    ...settingsData.questionOptions,
+                    columnName: e.target.value,
+                  },
                 })
               }
             />
@@ -80,11 +87,14 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
             <Label htmlFor="guidance">Guidance Hint</Label>
             <Input
               id="guidance"
-              value={questionOptions.guidance}
+              value={settingsData.questionOptions?.guidance ?? ""}
               onChange={(e) =>
-                setQuestionOptions({
-                  ...questionOptions,
-                  guidance: e.target.value,
+                setSettingsData({
+                  ...settingsData,
+                  questionOptions: {
+                    ...settingsData.questionOptions,
+                    guidance: e.target.value,
+                  },
                 })
               }
               placeholder="Enter your guidance hint"
@@ -94,11 +104,14 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
             <Label htmlFor="default">Defalult Response</Label>
             <Input
               id="default"
-              value={questionOptions.default}
+              value={settingsData.questionOptions?.default ?? ""}
               onChange={(e) =>
-                setQuestionOptions({
-                  ...questionOptions,
-                  default: e.target.value,
+                setSettingsData({
+                  ...settingsData,
+                  questionOptions: {
+                    ...settingsData.questionOptions,
+                    default: e.target.value,
+                  },
                 })
               }
               placeholder="Enter your default response"
@@ -107,11 +120,16 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="required">Mandatory Response</Label>
             <Select
-              defaultValue={questionOptions.mandatory ? "true" : "false"}
+              defaultValue={
+                settingsData.questionOptions?.mandatory ? "true" : "false"
+              }
               onValueChange={(value) =>
-                setQuestionOptions({
-                  ...questionOptions,
-                  mandatory: value === "true",
+                setSettingsData({
+                  ...settingsData,
+                  questionOptions: {
+                    ...settingsData.questionOptions,
+                    mandatory: value === "true",
+                  },
                 })
               }
             >
@@ -129,13 +147,20 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
           </div>
         </TabsContent>
         <TabsContent value="logic" className="space-y-4">
-          {conditions.map((condition, index) => (
+          {settingsData.skipLogic?.conditions?.map((condition, index) => (
             <ConditionItem
               condition={condition}
+              questions={questions}
               setCondition={(newCondition: any) =>
-                setConditions(
-                  conditions.map((c, i) => (i === index ? newCondition : c))
-                )
+                setSettingsData({
+                  ...settingsData,
+                  skipLogic: {
+                    ...settingsData.skipLogic,
+                    conditions: settingsData.skipLogic?.conditions?.map(
+                      (c, i) => (i === index ? newCondition : c)
+                    ),
+                  },
+                })
               }
             />
           ))}
@@ -150,15 +175,26 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
           <div className="condition-container-with-three-select-inputs">
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="type">Comparator</Label>
-              <Select>
+              <Select
+                defaultValue={settingsData.validationCriteria?.comparator ?? ""}
+                onValueChange={(value) =>
+                  setSettingsData({
+                    ...settingsData,
+                    validationCriteria: {
+                      ...settingsData.validationCriteria,
+                      comparator: value,
+                    },
+                  })
+                }
+              >
                 <SelectTrigger className="flex items-center space-x-2">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Comparator</SelectLabel>
-                    <SelectItem value="true">=</SelectItem>
-                    <SelectItem value="false">!=</SelectItem>
+                    <SelectItem value="=">=</SelectItem>
+                    <SelectItem value="!=">!=</SelectItem>
                     <SelectItem value="answered">Answered</SelectItem>
                     <SelectItem value="not-answered">Not Answered</SelectItem>
                   </SelectGroup>
@@ -166,15 +202,85 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
               </Select>
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="type">Value</Label>
-              <Input id="type" placeholder="Enter your value" />
+              <Label htmlFor="validationValue">Value</Label>
+              <Input
+                id="validationValue"
+                placeholder="Enter your value"
+                value={settingsData.validationCriteria?.value ?? ""}
+                onChange={(e) =>
+                  setSettingsData({
+                    ...settingsData,
+                    validationCriteria: {
+                      ...settingsData.validationCriteria,
+                      value: e.target.value,
+                    },
+                  })
+                }
+              />
             </div>
           </div>
           <div className="condition-container-with-three-select-inputs">
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="type">Error Message</Label>
-              <Input id="type" placeholder="Enter your value" />
+              <Label htmlFor="errorMessage">Error Message</Label>
+              <Input
+                id="errorMessage"
+                placeholder="Enter your error message"
+                value={settingsData.validationCriteria?.errorMessage ?? ""}
+                onChange={(e) =>
+                  setSettingsData({
+                    ...settingsData,
+                    validationCriteria: {
+                      ...settingsData.validationCriteria,
+                      errorMessage: e.target.value,
+                    },
+                  })
+                }
+              />
             </div>
+          </div>
+          <div className="condition-container-with-three-select-inputs">
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="formula">Formula</Label>
+              <Input
+                id="formula"
+                placeholder="Enter your formula"
+                value={settingsData.validationCriteria?.formula ?? ""}
+                onChange={(e) =>
+                  setSettingsData({
+                    ...settingsData,
+                    validationCriteria: {
+                      ...settingsData.validationCriteria,
+                      formula: e.target.value,
+                    },
+                  })
+                }
+              />
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="response-options" className="space-y-4">
+          {settingsData.skipLogic?.conditions?.map((condition, index) => (
+            <ConditionItem
+              condition={condition}
+              questions={questions}
+              setCondition={(newCondition: any) =>
+                setSettingsData({
+                  ...settingsData,
+                  skipLogic: {
+                    ...settingsData.skipLogic,
+                    conditions: settingsData.skipLogic?.conditions?.map(
+                      (c, i) => (i === index ? newCondition : c)
+                    ),
+                  },
+                })
+              }
+            />
+          ))}
+          <div
+            className="bg-black text-white border-none p-2.5 rounded cursor-pointer w-3/5 font-semibold text-sm flex items-center justify-center"
+            onClick={handleAddConditionClick}
+          >
+            +ADD ANOTHER OPTION
           </div>
         </TabsContent>
       </Tabs>

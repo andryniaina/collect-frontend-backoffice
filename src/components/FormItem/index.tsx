@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.css';
 import { FaEdit, FaCog } from 'react-icons/fa';
 import TypesBox from '../TypesBox';
 import { SettingsModal } from '@/components/modal/settings-modal';
+import { ISettings } from '@/data/types/settingsTypes';
 
 interface FormBuilderProps {
   onAddQuestion: any ;
   question?: string;
+  keyValue?: any;
+  questions: any[];
 }
 
-const FormBuilder: React.FC<FormBuilderProps> = ({ onAddQuestion, question }) => {
+const FormBuilder: React.FC<FormBuilderProps> = ({ onAddQuestion, question, keyValue, questions }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [questionText, setQuestionText] = useState(question || '');
   const [isChoosingType, setIsChoosingType] = useState(false)
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [settingsData, setSettingsData] = useState<ISettings>({});
 
   const handleAddQuestionClick = () => {
     setIsEditing(true);
@@ -30,9 +34,13 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ onAddQuestion, question }) =>
   }
 
   const handleSaveClick = (type: string) => {
-    onAddQuestion({label:questionText, type});
+    onAddQuestion({label:questionText, type, settingsData});
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    onAddQuestion({label:questionText, settingsData});
+  } , [settingsData])
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -51,10 +59,14 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ onAddQuestion, question }) =>
   return (
     <div className="form-builder-container">
       <SettingsModal
+        key={keyValue}
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={handleConfirm}
         loading={loading}
+        settingsData={settingsData}
+        setSettingsData={setSettingsData}
+        questions={questions}
       />
       {!isEditing ? (
         <>
