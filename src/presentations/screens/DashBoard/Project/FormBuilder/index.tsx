@@ -11,8 +11,73 @@ import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import { getUsersSA } from "@/services/application/user.sa";
 import { useQueryClient } from "@tanstack/react-query";
 import { ISettings } from "@/data/types/settingsTypes";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import Item from "./Item";
+import Group from "./Group";
 
 const FormBuilderPage: React.FC = () => {
+  const [groups, setGroups] = useState<any[]>([]);
+
+  const updateGroupName = (groupId: string, newName: string) => {
+    setGroups((prevGroups) =>
+      prevGroups.map((group) =>
+        group.id === groupId ? { ...group, name: newName } : group
+      )
+    );
+  };
+
+  const moveItem = (
+    itemId: string,
+    toGroupId: string | null,
+    index: number
+  ) => {
+    setGroups((prevGroups) => {
+      const newGroups = prevGroups.map((group) => ({
+        ...group,
+        items: [...group.items],
+      }));
+      let item: any | undefined;
+
+      // Find and remove the item from its current location
+      for (let i = 0; i < newGroups.length; i++) {
+        const itemIndex = newGroups[i].items.findIndex(
+          (i: any) => i.id === itemId
+        );
+        if (itemIndex !== -1) {
+          [item] = newGroups[i].items.splice(itemIndex, 1);
+          break;
+        }
+      }
+
+      if (!item) {
+        const unassignedIndex = questions.findIndex((i) => i.id === itemId);
+        if (unassignedIndex !== -1) {
+          [item] = questions.splice(unassignedIndex, 1);
+          setQuestions([...questions]);
+        }
+      }
+
+      if (!item) return prevGroups;
+
+      // Add item to the new group or unassigned items
+      if (toGroupId === null) {
+        setQuestions((prev) => {
+          const newItems = [...prev];
+          newItems.splice(index, 0, item!);
+          return newItems;
+        });
+      } else {
+        const targetGroup = newGroups.find((g) => g.id === toGroupId);
+        if (targetGroup) {
+          targetGroup.items.splice(index, 0, item);
+        }
+      }
+
+      return newGroups;
+    });
+  };
+
   const queryClient = useQueryClient();
   const [options, setOptions] = useState<Option[]>([]);
   useEffect(() => {
@@ -40,6 +105,17 @@ const FormBuilderPage: React.FC = () => {
     setQuestions(newQuestions);
   };
 
+  const handleAddNewGroup = () => {
+    setGroups([
+      ...groups,
+      {
+        id: "group" + (groups.length + 1),
+        name: "Group " + (groups.length + 1),
+        items: [],
+      },
+    ]);
+  };
+
   const handleAddNewFormBuilder = () => {
     setQuestions([...questions, { label: "", type: "" }]);
   };
@@ -49,9 +125,8 @@ const FormBuilderPage: React.FC = () => {
       .then((response: any) => {
         setFormName(response.name);
         setQuestions([
-          ...questions,
           ...response.fields.map((field: any) => {
-            return { label: field.name, type: field.type };
+            return { id: field.name, label: field.name, type: field.type };
           }),
         ]);
         console.log(response.fields);
@@ -63,22 +138,34 @@ const FormBuilderPage: React.FC = () => {
 
   const deploy = async () => {
     let payload: any = {};
-    payload["fields"] = questions.map(({ label, type,settingsData }: {label:any,type:any,settingsData:ISettings}) => {
-      const field:any = { name: label, type} ;
-      if(settingsData){
-        field.description = settingsData.questionOptions?.guidance;
-        field.required = settingsData.questionOptions?.mandatory;
-        field.default = settingsData.questionOptions?.default;
-        field.validation = {
-          message: settingsData.validationCriteria?.errorMessage,
-          comparator: settingsData.validationCriteria?.comparator,
-          value: settingsData.validationCriteria?.value,
-        },
-        field.formula = settingsData.validationCriteria?.formula;
+    payload["fields"] = questions.map(
+      ({
+        label,
+        type,
+        settingsData,
+      }: {
+        label: any;
+        type: any;
+        settingsData: ISettings;
+      }) => {
+        const field: any = { name: label, type };
+        if (settingsData) {
+          field.description = settingsData.questionOptions?.guidance;
+          field.required = settingsData.questionOptions?.mandatory;
+          field.default = settingsData.questionOptions?.default;
+          field.group = "Default";
+          (field.validation = {
+            message: settingsData.validationCriteria?.errorMessage,
+            comparator: settingsData.validationCriteria?.comparator,
+            value: settingsData.validationCriteria?.value,
+          }),
+            (field.formula = settingsData.validationCriteria?.formula);
+        }
+        return field;
       }
-      return field;
-    });
+    );
     payload["status"] = "Deployed";
+    payload["groups"] = [...groups.map((group: any) => group.name), "Default"];
     console.log({ payload });
     await updateForm(params.id ?? "", payload);
     navigate("/dashboard/project");
@@ -99,38 +186,88 @@ const FormBuilderPage: React.FC = () => {
   return (
     <div className="container-builder">
       <div className="form-builder-page">
-        <h1>{formName}</h1>
-        {questions.map((question, index) => (
-          <FormBuilder
-            key={index}
-            keyValue={index}
-            question={question.label}
-            questions={questions}
-            onAddQuestion={handleAddQuestion(index)}
+        <DndProvider backend={HTML5Backend}>
+          <h1>{formName}</h1>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div
+              style={{
+                marginTop: "20px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                padding: "10px",
+                marginBottom: "20px",
+              }}
+            >
+              <h2
+                style={{
+                  marginBottom: "10px",
+                  borderBottom: "1px solid #eee",
+                  paddingBottom: "5px",
+                }}
+              >
+                Default Group
+              </h2>
+              {questions.map((item, index) => (
+                <Item
+                  key={item.id}
+                  id={item.id}
+                  label={item.label}
+                  index={index}
+                  groupId={null}
+                  moveItem={moveItem}
+                  keyValue={index}
+                  question={item.label}
+                  questions={questions}
+                  onAddQuestion={handleAddQuestion(index)}
+                />
+              ))}
+            </div>
+            {groups.map((group) => (
+              <Group
+                updateGroupName={updateGroupName}
+                questions={questions}
+                handleAddQuestion={handleAddQuestion}
+                key={group.id}
+                group={group}
+                moveItem={moveItem}
+              />
+            ))}
+          </div>
+          <button
+            className="add-new-form-builder-button"
+            onClick={handleAddNewFormBuilder}
+          >
+            + Add New Question
+          </button>
+          <button
+            className="add-new-form-builder-button"
+            onClick={handleAddNewGroup}
+          >
+            + Add New Group
+          </button>
+          <MultipleSelector
+            key={JSON.stringify(options)}
+            defaultOptions={options}
+            placeholder="Share this form with"
+            emptyIndicator={
+              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                no user found.
+              </p>
+            }
           />
-        ))}
-        <button
-          className="add-new-form-builder-button"
-          onClick={handleAddNewFormBuilder}
-        >
-          + Add New Question
-        </button>
-        <MultipleSelector
-          key={JSON.stringify(options)}
-          defaultOptions={options}
-          placeholder="Share this form with"
-          emptyIndicator={
-            <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-              no user found.
-            </p>
-          }
-        />
-        <button className="add-new-form-builder-button" onClick={saveAsDraft}>
-          Save as draft
-        </button>
-        <button className="add-new-form-builder-button" onClick={deploy}>
-          Deploy
-        </button>
+          <button className="add-new-form-builder-button" onClick={saveAsDraft}>
+            Save as draft
+          </button>
+          <button className="add-new-form-builder-button" onClick={deploy}>
+            Deploy
+          </button>
+        </DndProvider>
       </div>
     </div>
   );

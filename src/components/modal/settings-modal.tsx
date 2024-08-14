@@ -63,7 +63,6 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
           <TabsTrigger value="options">Question Options</TabsTrigger>
           <TabsTrigger value="logic">Skip Logic</TabsTrigger>
           <TabsTrigger value="validation">Validation</TabsTrigger>
-          <TabsTrigger value="response-options">Options</TabsTrigger>
         </TabsList>
         <TabsContent value="options" className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -256,31 +255,6 @@ export const SettingsModal: React.FC<AlertModalProps> = ({
                 }
               />
             </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="response-options" className="space-y-4">
-          {settingsData.skipLogic?.conditions?.map((condition, index) => (
-            <ConditionItem
-              condition={condition}
-              questions={questions}
-              setCondition={(newCondition: any) =>
-                setSettingsData({
-                  ...settingsData,
-                  skipLogic: {
-                    ...settingsData.skipLogic,
-                    conditions: settingsData.skipLogic?.conditions?.map(
-                      (c, i) => (i === index ? newCondition : c)
-                    ),
-                  },
-                })
-              }
-            />
-          ))}
-          <div
-            className="bg-black text-white border-none p-2.5 rounded cursor-pointer w-3/5 font-semibold text-sm flex items-center justify-center"
-            onClick={handleAddConditionClick}
-          >
-            +ADD ANOTHER OPTION
           </div>
         </TabsContent>
       </Tabs>
