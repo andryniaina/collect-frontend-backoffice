@@ -17,11 +17,12 @@ import Item from "./Item";
 import Group from "./Group";
 
 const FormBuilderPage: React.FC = () => {
-  const [groups, setGroups] = useState<any[]>([]);
+  const [groups, setGroups] = useState<any[]>([
+  ]);
 
   const updateGroupName = (groupId: string, newName: string) => {
-    setGroups((prevGroups) =>
-      prevGroups.map((group) =>
+    setGroups(prevGroups => 
+      prevGroups.map(group => 
         group.id === groupId ? { ...group, name: newName } : group
       )
     );
@@ -51,7 +52,9 @@ const FormBuilderPage: React.FC = () => {
       }
 
       if (!item) {
-        const unassignedIndex = questions.findIndex((i) => i.id === itemId);
+        const unassignedIndex = questions.findIndex(
+          (i) => i.id === itemId
+        );
         if (unassignedIndex !== -1) {
           [item] = questions.splice(unassignedIndex, 1);
           setQuestions([...questions]);
@@ -76,6 +79,7 @@ const FormBuilderPage: React.FC = () => {
 
       return newGroups;
     });
+    console.log("questions after move", questions);
   };
 
   const queryClient = useQueryClient();
@@ -106,14 +110,7 @@ const FormBuilderPage: React.FC = () => {
   };
 
   const handleAddNewGroup = () => {
-    setGroups([
-      ...groups,
-      {
-        id: "group" + (groups.length + 1),
-        name: "Group " + (groups.length + 1),
-        items: [],
-      },
-    ]);
+    setGroups([...groups, { id: "group" + (groups.length + 1), name: "Group " + (groups.length + 1), items: [] }]);
   };
 
   const handleAddNewFormBuilder = () => {
@@ -153,7 +150,7 @@ const FormBuilderPage: React.FC = () => {
           field.description = settingsData.questionOptions?.guidance;
           field.required = settingsData.questionOptions?.mandatory;
           field.default = settingsData.questionOptions?.default;
-          field.group = "Default";
+          field.group = 'Default';
           (field.validation = {
             message: settingsData.validationCriteria?.errorMessage,
             comparator: settingsData.validationCriteria?.comparator,
@@ -165,9 +162,9 @@ const FormBuilderPage: React.FC = () => {
       }
     );
     payload["status"] = "Deployed";
-    payload["groups"] = [...groups.map((group: any) => group.name), "Default"];
+    payload["groups"] = [...groups.map((group: any) => group.name),'Default'];
     console.log({ payload });
-    await updateForm(params.id ?? "", payload);
+      await updateForm(params.id ?? "", payload);
     navigate("/dashboard/project");
   };
 
@@ -195,6 +192,7 @@ const FormBuilderPage: React.FC = () => {
               flexDirection: "column",
             }}
           >
+            
             <div
               style={{
                 marginTop: "20px",
@@ -215,8 +213,8 @@ const FormBuilderPage: React.FC = () => {
               </h2>
               {questions.map((item, index) => (
                 <Item
-                  key={item.id}
-                  id={item.id}
+                  key={item.label}
+                  id={item.label}
                   label={item.label}
                   index={index}
                   groupId={null}
@@ -229,14 +227,7 @@ const FormBuilderPage: React.FC = () => {
               ))}
             </div>
             {groups.map((group) => (
-              <Group
-                updateGroupName={updateGroupName}
-                questions={questions}
-                handleAddQuestion={handleAddQuestion}
-                key={group.id}
-                group={group}
-                moveItem={moveItem}
-              />
+              <Group updateGroupName={updateGroupName} questions={questions} handleAddQuestion={handleAddQuestion} key={group.id} group={group} moveItem={moveItem} />
             ))}
           </div>
           <button

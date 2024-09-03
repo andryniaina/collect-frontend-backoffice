@@ -11,6 +11,8 @@ import { AddUser } from "@/presentations/screens/Users/addUser";
 import CreateProject from "@/presentations/screens/DashBoard/Project/Create";
 import FormBuilder from "@/components/FormItem";
 import FormBuilderPage from "@/presentations/screens/DashBoard/Project/FormBuilder";
+import Map from "@/presentations/screens/DashBoard/Project/Stats/Map";
+import Table from "@/presentations/screens/DashBoard/Project/Stats/Table";
 
 const MainRoutes = () => {
   return (
@@ -21,7 +23,9 @@ const MainRoutes = () => {
           <Route path="" element={<DashBoard />} />
           <Route path="project" element={<Project />} />
           <Route path="project/builder/:id" element={<FormBuilderPage/>} />
-          <Route path="project/:id" element={<CreateProject />} />
+          <Route path="project/new" element={<CreateProject />} />
+          <Route path="project/stats/table/:id" element={<Table />} />
+          <Route path="project/stats/map/:id" element={<Map />} />
           <Route
             path="users"
             element={

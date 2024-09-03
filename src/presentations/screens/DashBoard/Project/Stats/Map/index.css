@@ -1,0 +1,9 @@
+/* src/MapComponent.css */
+  .map-container {
+    position: relative;
+    width: 50vw;
+    height: 50vh;
+  }
+  .leaflet-control-attribution {
+    display: none;
+  }
