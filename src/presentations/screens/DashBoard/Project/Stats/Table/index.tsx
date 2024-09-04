@@ -7,10 +7,6 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 export default function Project() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["forms"],
-    queryFn: getForms,
-  });
   const { id }  = useParams() as {id : string};
   const {data: submissions, isLoading: isLoadingSubmissions} = useQuery({
     queryKey: ["submissions",id],
@@ -26,7 +22,7 @@ export default function Project() {
     <>
       <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
         <Breadcrumbs items={breadcrumbItems} />
-        {!isLoading && <DataTableClient data={data} submissions={submissions} />}
+        {!isLoadingSubmissions && <DataTableClient submissions={submissions} />}
       </div>
     </>
   );

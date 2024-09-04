@@ -5,7 +5,6 @@ import { Project } from '@/data/const/data' ;
 import { useEffect, useState } from 'react';
 
 interface ProductsClientProps {
-  data: Project[];
   submissions: any[];
 }
 import { ColumnDef } from '@tanstack/react-table';
@@ -13,9 +12,7 @@ import { CellAction } from './cell-action';
 import { Checkbox } from '@/components/ui/checkbox';
 import { add } from 'date-fns';
 
-export const DataTableClient: React.FC<ProductsClientProps> = ({ data, submissions }) => {
-
-  const [projects, setProjects] = useState(data);
+export const DataTableClient: React.FC<ProductsClientProps> = ({ submissions }) => {
 
   const [columns, setColumns] = useState<ColumnDef<Project>[]>([
     {
