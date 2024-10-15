@@ -1,22 +1,29 @@
 "use client";
 import * as z from "zod";
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { getUsersSA } from "@/services/application/user.sa";
+import { useEffect, useState } from "react";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 // import FileUpload from "@/components/FileUpload";
@@ -31,8 +38,10 @@ const formSchema = z.object({
   description: z
     .string()
     .min(3, { message: "Project description must be at least 3 characters" }),
-  beginDate: z.coerce.string(),
-  endDate: z.coerce.string(),
+  beginDate: z.date({ required_error: "Begin date is required" }),
+  endDate: z.date({ required_error: "End date is required" }),
+  agents: z
+    .array(z.string()), // Schéma mis à jour pour agents
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -40,6 +49,11 @@ type ProductFormValues = z.infer<typeof formSchema>;
 interface ProductFormProps {
   initialData: any | null;
   categories: any;
+}
+
+interface User {
+  _id: string;
+  name: string;
 }
 
 export const ProjectFormular: React.FC<ProductFormProps> = ({
@@ -51,8 +65,12 @@ export const ProjectFormular: React.FC<ProductFormProps> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imgLoading, setImgLoading] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
   const title = initialData ? "Edit project" : "Create project form";
-  const description = initialData ? "Edit a project." : "Add a new project form";
+  const description = initialData
+    ? "Edit a project."
+    : "Add a new project form";
   const toastMessage = initialData ? "Project updated." : "Project created.";
   const action = initialData ? "Save changes" : "Create";
 
@@ -63,6 +81,7 @@ export const ProjectFormular: React.FC<ProductFormProps> = ({
         description: "",
         beginDate: "",
         endDate: "",
+        agents: [],
       };
 
   const form = useForm<ProductFormValues>({
@@ -71,6 +90,7 @@ export const ProjectFormular: React.FC<ProductFormProps> = ({
   });
 
   const onSubmit = async (data: ProductFormValues) => {
+    data.agents = selectedAgents;
     console.log("data", data);
     // const { _id, name }: any = await postForm(data);
     // router("/dashboard/project/builder/" + _id);
@@ -85,6 +105,24 @@ export const ProjectFormular: React.FC<ProductFormProps> = ({
       setOpen(false);
     }
   };
+
+  const getListUsers = () => {
+    getUsersSA().then((resp) => {
+      if (resp?.status == 200) {
+        setUsers(resp.data);
+      }
+    });
+  };
+
+  const handleAgentSelect = (value: string) => {
+    setSelectedAgents((prev) =>
+      prev.includes(value) ? prev.filter((agent) => agent !== value) : [...prev, value]
+    );
+  };
+
+  useEffect(() => {
+    getListUsers();
+  }, []);
 
   return (
     <>
@@ -149,7 +187,13 @@ export const ProjectFormular: React.FC<ProductFormProps> = ({
                 <FormItem>
                   <FormLabel>Date de début</FormLabel>
                   <FormControl>
-                    <Calendar {...field} disabled={loading} />
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      initialFocus
+                      disabled={(date) => date < new Date()}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,7 +206,37 @@ export const ProjectFormular: React.FC<ProductFormProps> = ({
                 <FormItem>
                   <FormLabel>Date de fin</FormLabel>
                   <FormControl>
-                    <Calendar {...field} disabled={loading} />
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      initialFocus
+                      disabled={(date) => date < new Date()}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="agents"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Agents</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={handleAgentSelect}>
+                      <SelectTrigger className="w-[300px]">
+                        <SelectValue placeholder="Select agents" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {users.map((user) => (
+                          <SelectItem key={user._id} value={user._id}>
+                            {user.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
