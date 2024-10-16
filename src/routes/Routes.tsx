@@ -13,6 +13,8 @@ import CreateGroup from "@/presentations/screens/Users/Groups/AddGroup";
 import FormBuilderPage from "@/presentations/screens/DashBoard/Project/FormBuilder";
 import Map from "@/presentations/screens/DashBoard/Project/Stats/Map";
 import Table from "@/presentations/screens/DashBoard/Project/Stats/Table";
+import ProjectForm from "@/presentations/screens/DashBoard/ProjectForm";
+import CreateProjectForm from "@/presentations/screens/DashBoard/ProjectForm/Create";
 import UpdateGroup from "@/presentations/screens/Users/Groups/UpdateGroup";
 
 const MainRoutes = () => {
@@ -27,6 +29,8 @@ const MainRoutes = () => {
           <Route path="project/new" element={<CreateProject />} />
           <Route path="project/stats/table/:id" element={<Table />} />
           <Route path="project/stats/map/:id" element={<Map />} />
+          <Route path="projectform" element={<ProjectForm />} />
+          <Route path="projectform/new" element={<CreateProjectForm />} />
           <Route
             path="users"
             element={

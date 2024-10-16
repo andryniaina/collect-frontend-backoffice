@@ -53,6 +53,12 @@ export const navItems: NavItem[] = [
     label: 'profile'
   },
   {
+    title: 'ProjectForm',
+    href: '/dashboard/projectform',
+    icon: 'project',
+    label: 'project'
+  },
+  {
     title: 'Logout',
     href: '/',
     icon: 'login',
