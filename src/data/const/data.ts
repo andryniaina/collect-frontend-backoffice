@@ -9,6 +9,11 @@ export type Project = {
   updatedAt: boolean;
 };
 
+export type Group = {
+  _id?: string;
+  name: string;
+};
+
 export type Employee = {
   id: number;
   first_name: string;

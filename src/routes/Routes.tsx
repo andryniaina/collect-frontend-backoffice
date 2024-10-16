@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import HomeScreen from "../presentations/screens/HomeScreen";
 import AuthenticatedLayout from "@/presentations/layouts/AuthenticatedLayout";
 import DashBoard from "@/presentations/screens/DashBoard";
 import Project from "@/presentations/screens/DashBoard/Project";
@@ -7,12 +6,14 @@ import Login from "@/presentations/screens/Login";
 import { AuthContext, AuthProvider } from "../services/AuthContext";
 import { useContext } from "react";
 import { ListUser } from "@/presentations/screens/Users";
+import { ListGroup } from "@/presentations/screens/Users/Groups";
 import { AddUser } from "@/presentations/screens/Users/addUser";
 import CreateProject from "@/presentations/screens/DashBoard/Project/Create";
-import FormBuilder from "@/components/FormItem";
+import CreateGroup from "@/presentations/screens/Users/Groups/AddGroup";
 import FormBuilderPage from "@/presentations/screens/DashBoard/Project/FormBuilder";
 import Map from "@/presentations/screens/DashBoard/Project/Stats/Map";
 import Table from "@/presentations/screens/DashBoard/Project/Stats/Table";
+import UpdateGroup from "@/presentations/screens/Users/Groups/UpdateGroup";
 
 const MainRoutes = () => {
   return (
@@ -31,6 +32,30 @@ const MainRoutes = () => {
             element={
               <RequireAuth>
                 <ListUser />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="users/groups/"
+            element={
+              <RequireAuth>
+                <ListGroup />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="users/groups/create"
+            element={
+              <RequireAuth>
+                <CreateGroup />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="users/groups/:id"
+            element={
+              <RequireAuth>
+                <UpdateGroup />
               </RequireAuth>
             }
           />
@@ -55,7 +80,7 @@ function RequireAuth({ children }: any) {
   let location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ path: location.pathname }} replace />;
+    return <Navigate to="/" state={{ path: location.pathname }} replace />;
   }
   return children;
 }
