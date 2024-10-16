@@ -1,8 +1,7 @@
 import axios from "axios";
-import { BACKEND_URL } from "../../config/url";
 
 const axiosInstance = axios.create({
-  baseURL: `${BACKEND_URL}/`,
+  baseURL: `/api`,
   headers: {
     'Content-Type': 'application/json',
   },
