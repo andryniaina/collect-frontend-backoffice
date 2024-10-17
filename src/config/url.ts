@@ -1,1 +1,1 @@
-export const BACKEND_URL = "http://51.77.159.227:5024"
+export const BACKEND_URL = "https://backend-535053947846.africa-south1.run.app"

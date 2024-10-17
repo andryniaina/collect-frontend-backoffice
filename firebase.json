@@ -8,10 +8,6 @@
     ],
     "rewrites": [
       {
-        "source": "/api/**",
-        "destination": "http://51.77.159.227:5024/**"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
